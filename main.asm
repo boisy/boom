@@ -17,54 +17,7 @@
 	NAM	BOOM
 	TTL	A Strategy Game
 
-LOAD	equ	$C000		Actual load address for binary
-
-PIA0D0	equ	$FF00
-PIA0C0	equ	$FF01
-PIA0D1	equ	$FF02
-PIA0C1	equ	$FF03
-
-PIA1D0	equ	$FF20
-PIA1C0	equ	$FF21
-PIA1D1	equ	$FF22
-PIA1C1	equ	$FF23
-
-VIDBASE	equ	$0400
-VIDLINE	equ	$20
-VIDSIZE	equ	$0200
-
-SQWAVE	equ	$02
-
-SPINP1	equ	$01
-SPINP2	equ	$02
-
-WHITE	equ	$cf
-BLACK	equ	$80
-
-MVCINIT	equ	$40
-MVCDLTA	equ	$0A
-MVCTMIN	equ	MVCINIT-MVCDLTA
-MVCTMAX	equ	MVCINIT+MVCDLTA
-
-TONDLY1	equ	$19ca
-TONDLY2	equ	$13a6
-TONDLY3	equ	$0d82
-PPLYDLY	equ	$0312
-PBTNDLY	equ	$3120
-
-FAILDLY	equ	$5c1c
-FAILSND	equ	$bb
-
-WONDLY	equ	$013a
-WONDUR	equ	$044c
-
-WINRDLY	equ	$1eb4
-
-MOVTIME	equ	$2000
-
         SECTION main
-
-	org	LOAD
 
 EXEC	equ	*
 * Set direct page register
@@ -96,8 +49,22 @@ EXEC	equ	*
 	sta	PIA1C1
 
 * Clear the screen
-	lbsr	CLRSCN
+	lbsr	ClearScreen
+        
+        leax    Message,pcr
+        lbsr    PrintBlock
 
 loop    bra     loop
 
+Message 
+        fdb     $070E
+        fcc     "BOOM"
+        fcb     $00
+
+        fdb     $080E
+        fcc     "TOWN"
+        fcb     $00
+
+        fdb     $FFFF
+ 
         END     SECTION
