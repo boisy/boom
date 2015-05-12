@@ -34,37 +34,22 @@ EXEC	equ	*
 	sta	$FF03
 	tst	$FF02
 
-	lda	$FF01		Enable hsync interrupt generation
-	ora	#$01
-	sta	$FF01
+*	lda	$FF01		Disable hsync interrupt generation
+*	ora	#$01
+*	sta	$FF01
 
 * Init audio output
-	lda	PIA1C1		Enable square wave audio output
-	anda	#$FB
-	sta	PIA1C1
-	ldb	#SQWAVE
-	orb	PIA1D1
-	stb	PIA1D1
-	ora	#$04
-	sta	PIA1C1
+*	lda	PIA1C1		Enable square wave audio output
+*	anda	#$FB
+*	sta	PIA1C1
+*	ldb	#SQWAVE
+*	orb	PIA1D1
+*	stb	PIA1D1
+*	ora	#$04
+*	sta	PIA1C1
 
-* Clear the screen
-	lbsr	ClearScreen
-        
-        leax    Message,pcr
-        lbsr    PrintBlock
+        lbsr    ShowTitleScreen
 
-loop    bra     loop
+l       bra     l
 
-Message 
-        fdb     $070E
-        fcc     "BOOM"
-        fcb     $00
-
-        fdb     $080E
-        fcc     "TOWN"
-        fcb     $00
-
-        fdb     $FFFF
- 
         END     SECTION

@@ -1,17 +1,19 @@
-        SECTION clearscreen
+        SECTION screenutils
 
 *
 * Clear the screen
 *
+* Entry:
+*   A = character to clear screen with
+*
 ClearScreen
-        pshs    a,x,y
+        pshs    x,y
         ldx	#$400
 	leay	$200,x
-	lda	#$20
 clloop	sta	,x+
 	cmpx	,y
 	bne	clloop
-	puls    a,x,y,pc
+	puls    x,y,pc
 
 *
 * Print Block
@@ -19,7 +21,8 @@ clloop	sta	,x+
 * A block has the format:
 *  - 2 bytes: $RRCC  (where RR == row and CC = column for text to appear)
 *  - n bytes: "Some String" (the text to show)
-*  - 1 byte:  $00 (nil terminator)
+*  - n bytes: "Some String" (the text to show)
+*  - 2 bytes: Subroutine (to be called after printing of bytes on screen)
 *
 * This can repeat for additional positions and nil terminated strings.
 * To terminate the processing, set $RRCC to $FFFF. This flags the routine
@@ -34,6 +37,8 @@ pbloop  ldy      ,x++
         cmpy     #$FFFF
         beq      done1
         bsr      PrintStringAt
+        ldd      ,x++
+        jsr      d,x
         bra      pbloop
 done1   puls     d,x,y,pc
 
